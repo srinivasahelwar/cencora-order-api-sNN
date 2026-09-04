@@ -43,6 +43,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Smoke test application import
+        working-directory: ./app
         run: |
           python -m py_compile app/main.py
 
@@ -72,7 +73,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.image_tag }} .
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.image_tag }} ./app
           docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.image_tag }} \
                      ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
