@@ -20,7 +20,7 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: cencora-order-api-snn
+  IMAGE_NAME: srinivasahelwar/cencora-order-api-snn
   PYTHON_VERSION: "3.12"
 
 jobs:
@@ -66,15 +66,18 @@ jobs:
 
       - name: Create image tag
         id: meta
+        shell: bash
         run: |
           SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
           echo "image_tag=sha-${SHORT_SHA}" >> "$GITHUB_OUTPUT"
 
       - name: Build Docker image
         run: |
-          docker build  -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.image_tag }} .
-          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.image_tag }} \
-                     ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          docker build \
+            -f ./app/Dockerfile \
+            -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.image_tag }} \
+            -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
+            ./app
 
       - name: Push Docker image
         run: |
