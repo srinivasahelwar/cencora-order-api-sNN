@@ -72,7 +72,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.image_tag }} .
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.image_tag }} ./app
           docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.image_tag }} \
                      ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
